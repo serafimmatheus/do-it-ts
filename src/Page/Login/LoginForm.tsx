@@ -22,7 +22,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useLogin } from "../../Hooks/LoginHooks";
 import { useHistory } from "react-router-dom";
-import { ModalLogin } from "../../Components/ModalLogin";
 import { ModalLoginSuccess } from "../../Components/ModalLogin/ModalLoginSuccess";
 import { ModalLoginError } from "../../Components/ModalLogin/ModalLoginError";
 

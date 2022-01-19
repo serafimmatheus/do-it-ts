@@ -1,14 +1,6 @@
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import { createContext, ReactNode, useCallback, useContext } from "react";
 
 import { api } from "../../Services/api";
-import { useHistory } from "react-router-dom";
-import { LoginData } from "../../Types.ts/Login";
 
 interface RegisterChildren {
   children: ReactNode;

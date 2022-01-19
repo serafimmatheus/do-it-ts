@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { theme } from "../Styles/Theme";
 import { LoginProvider } from "./LoginHooks";
 import { RegisterProvider } from "./RegisterHooks";
+import { TarefasProviders } from "./TarefasHooks";
 
 interface ChildrenProps {
   children: ReactNode;
@@ -10,10 +11,12 @@ interface ChildrenProps {
 
 export const Providers = ({ children }: ChildrenProps) => {
   return (
-    <RegisterProvider>
-      <LoginProvider>
-        <ChakraProvider theme={theme}>{children}</ChakraProvider>
-      </LoginProvider>
-    </RegisterProvider>
+    <TarefasProviders>
+      <RegisterProvider>
+        <LoginProvider>
+          <ChakraProvider theme={theme}>{children}</ChakraProvider>
+        </LoginProvider>
+      </RegisterProvider>
+    </TarefasProviders>
   );
 };
