@@ -1,4 +1,3 @@
-import jwtDecode from "jwt-decode";
 import {
   Modal,
   ModalOverlay,
@@ -9,7 +8,6 @@ import {
   Image,
   Heading,
 } from "@chakra-ui/react";
-import { useState } from "react";
 
 import group82 from "../../Assets/Group82.svg";
 import { useLogin } from "../../Hooks/LoginHooks";
@@ -20,16 +18,13 @@ interface ErrorsProps {
 }
 
 export const ModalLogOut = ({ isOpen, onClose }: ErrorsProps) => {
-  const [token] = useState(localStorage.getItem("@token-doit") || "");
-  const userDecode = jwtDecode<any>(token);
-
-  const { handleSignOut } = useLogin();
+  const { handleSignOut, data } = useLogin();
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent zIndex="1" position="absolute" right={["", "", "5%"]}>
         <Flex w="100%">
-          <ModalHeader fontSize="18px">{userDecode.email}</ModalHeader>
+          <ModalHeader fontSize="18px">{data.user.email}</ModalHeader>
         </Flex>
 
         <Flex w="100%" padding="20px">

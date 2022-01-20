@@ -4,7 +4,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalFooter,
-  Textarea,
   ModalCloseButton,
   Button,
   Flex,
@@ -20,18 +19,35 @@ import { useTarefas } from "../../Hooks/TarefasHooks";
 import { Input } from "../Form/Input";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useLogin } from "../../Hooks/LoginHooks";
+import { Textarea } from "../Form/TextArea";
 
 interface ModalTasksProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface Props {
+  title: string;
+  description: string;
+  userId: string;
+  completed: boolean;
+}
+
 export const ModalTasks = ({ isOpen, onClose }: ModalTasksProps) => {
-  const { handleTasks, getTasks } = useTarefas();
+  const { createTasks, getTasks } = useTarefas();
+
+  const { data } = useLogin();
 
   const schema = yup.object().shape({
-    title: yup.string().required("Título obrigatório"),
-    description: yup.string().required("Título obrigatório"),
+    title: yup
+      .string()
+      .required("Título obrigatório")
+      .max(20, "Máximo 20 caracteres"),
+    description: yup
+      .string()
+      .required("Título obrigatório")
+      .max(100, "Máximo 100 caracteres"),
   });
 
   const {
@@ -43,12 +59,18 @@ export const ModalTasks = ({ isOpen, onClose }: ModalTasksProps) => {
     resolver: yupResolver(schema),
   });
 
-  const handleTarefasSubmit = (data: any) => {
-    handleTasks(data)
+  const handleTarefasSubmit = ({ title, description }: any) => {
+    const newData = {
+      title,
+      description,
+      userId: data.user.id,
+      completed: false,
+    };
+    createTasks(newData, data.accessToken)
       .then((_) => {
         reset();
         onClose();
-        getTasks();
+        getTasks(data.user.id, data.accessToken);
       })
       .catch((_) => {});
   };
@@ -73,18 +95,17 @@ export const ModalTasks = ({ isOpen, onClose }: ModalTasksProps) => {
               label="Título"
               placeholder="Digite seu título"
               {...register("title")}
+              error={errors.title}
             />
           </Box>
 
           <Box w="100%">
-            <Text mb="1" ml="1" color="gray.400">
-              Descrição
-            </Text>
-
             <Textarea
               {...register("description")}
               resize="none"
               placeholder="Digite sua descrição"
+              label="Descrição"
+              error={errors.description}
             />
           </Box>
 

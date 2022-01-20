@@ -9,7 +9,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FaBars } from "react-icons/fa";
+import { FaTh } from "react-icons/fa";
 import icon from "../../Assets/Icon.svg";
 import { ModalLogOut } from "../ModalLogout";
 
@@ -39,7 +39,7 @@ export const Header = () => {
           </Flex>
 
           <Flex>
-            <FaBars onClick={() => onOpen()} size="30px" />
+            <FaTh onClick={() => onOpen()} size="30px" />
           </Flex>
         </Box>
       </Grid>

@@ -10,10 +10,12 @@ export const Search = () => {
       <ModalTasks isOpen={isOpen} onClose={onClose} />
 
       <Grid
-        mt="20px"
+        padding="20px 0"
         w={["auto", "auto", "auto", "auto"]}
         flexDirection={["column", "column", "row", "row"]}
         display="flex"
+        borderBottom="2px solid"
+        borderColor="gray.100"
       >
         <Flex
           w={["100%", "100%", "100%", "50%"]}

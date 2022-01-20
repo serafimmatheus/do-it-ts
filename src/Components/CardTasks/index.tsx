@@ -1,22 +1,70 @@
-import { Box, Flex, Grid, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Grid,
+  Heading,
+  Text,
+  VStack,
+  useToast,
+  Progress,
+} from "@chakra-ui/react";
 import { FaTrash, FaCheck } from "react-icons/fa";
+import { useLogin } from "../../Hooks/LoginHooks";
 import { useTarefas } from "../../Hooks/TarefasHooks";
 
 interface CardProps {
   id: number;
   title: string;
   description: string;
+  completed: boolean;
 }
 
-export const CardTasks = ({ title, description, id }: CardProps) => {
-  const { deleteTasks } = useTarefas();
+interface HandleDeleteProps {
+  id: number;
+}
+
+export const CardTasks = ({ title, description, id, completed }: CardProps) => {
+  const toast = useToast();
+
+  const { data } = useLogin();
+
+  const { deleteTasks, myTasks, updateTask, getTasks } = useTarefas();
+
+  const handleDelete = (id: any) => {
+    deleteTasks(id)
+      .then((_) => {
+        toast({
+          title: "Tarefa deletada",
+          description: "Você deletou uma tarefa.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .catch((_) => {
+        toast({
+          title: `Ops, algo deu errado.`,
+          status: "error",
+          isClosable: true,
+        });
+      });
+  };
+
+  const handleUpdateTask = (id: number) => {
+    updateTask(id, data.accessToken, data.user.id).then((_) => {
+      getTasks(data.user.id, data.accessToken);
+    });
+  };
+
   return (
-    <Grid
+    <Flex
+      flexDirection="column"
       w={["320px", "384px"]}
       h="auto"
       bg="gray.100"
       padding="20px"
-      margin={["10px 0px"]}
+      margin={["10px 0px", "10px 0px", "10px"]}
+      justifyContent="center"
     >
       <Flex alignItems="center" justifyContent="space-between" mb="3">
         <Heading size="md">{title}</Heading>
@@ -32,7 +80,7 @@ export const CardTasks = ({ title, description, id }: CardProps) => {
             alignItems="center"
             borderRadius="5px"
           >
-            <FaTrash onClick={() => deleteTasks(id)} />
+            <FaTrash onClick={() => handleDelete(id)} />
           </Box>
 
           <Box
@@ -44,8 +92,12 @@ export const CardTasks = ({ title, description, id }: CardProps) => {
             justifyContent="center"
             alignItems="center"
             borderRadius="5px"
+            bgColor={completed ? "purple.700" : "transparent"}
           >
-            <FaCheck />
+            <FaCheck
+              color={completed ? "white" : "black"}
+              onClick={() => handleUpdateTask(id)}
+            />
           </Box>
         </Flex>
       </Flex>
@@ -53,14 +105,15 @@ export const CardTasks = ({ title, description, id }: CardProps) => {
       <VStack spacing="5">
         <Text>{description}</Text>
 
-        <Box
+        <Progress
+          colorScheme="purple"
           w="100%"
-          h="10px"
-          bgGradient={["linear(to-r, purple.800 15%, gray.200 15%)"]}
-        ></Box>
+          value={completed ? 100 : 10}
+          bg="gray.200"
+        />
       </VStack>
 
       <Text mt="5">07 March 2021</Text>
-    </Grid>
+    </Flex>
   );
 };

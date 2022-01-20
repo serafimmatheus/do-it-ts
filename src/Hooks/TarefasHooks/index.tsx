@@ -1,4 +1,3 @@
-import jwtDecode from "jwt-decode";
 import {
   useContext,
   createContext,
@@ -13,11 +12,24 @@ interface ChildrenProps {
   children: ReactNode;
 }
 
+interface MycardsProps {
+  id: string;
+  title: string;
+  description: string;
+  userId: string;
+  completed: boolean;
+}
+
 interface TarefasProvidersData {
-  handleTasks: (data: any) => Promise<void>;
   myTasks: any;
-  getTasks: () => Promise<void>;
+  getTasks: (userId: string, accessToken: string) => Promise<void>;
   deleteTasks: (id: any) => Promise<void>;
+  updateTask: (
+    taskId: number,
+    accessToken: string,
+    userId: string
+  ) => Promise<void>;
+  createTasks: (data: any, accessToken: string) => Promise<void>;
 }
 
 const TarefasContext = createContext<TarefasProvidersData>(
@@ -37,53 +49,64 @@ export const useTarefas = () => {
 export const TarefasProviders = ({ children }: ChildrenProps) => {
   const [token] = useState(localStorage.getItem("@token-doit") || "");
 
-  const decoder: any = jwtDecode(token);
+  const [myTasks, setMyTasks] = useState<any[]>([]);
 
-  const [myTasks, setMyTasks] = useState<any>([]);
+  const getTasks = useCallback(async (userId: string, accessToken: string) => {
+    // const { data } = response;
 
-  const getTasks = useCallback(async () => {
-    const response = await api.get("/tasks", {
+    try {
+      const response = await api.get(`/tasks?userId=${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      setMyTasks(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  const createTasks = useCallback(async (data: any, accessToken: string) => {
+    const response = await api.post("/tasks", data, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
-
-    const { data } = response;
-
-    setMyTasks([...myTasks, data]);
   }, []);
 
-  useEffect(() => {
-    getTasks();
-  }, []);
-
-  const handleTasks = useCallback(async ({ title, description }: any) => {
-    const response = await api.post(
-      "/tasks",
-      {
-        title: title,
-        description: description,
-        userId: decoder.sub,
-      },
-      {
+  const deleteTasks = useCallback(
+    async (id: any) => {
+      const response = await api.delete(`/tasks/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
-  }, []);
+      });
 
-  const deleteTasks = useCallback(async (id: any) => {
-    const response = await api.delete(`/tasks/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }, []);
+      const filteredTasks = myTasks.filter((elem: any) => elem.id !== id);
+      setMyTasks(filteredTasks);
+    },
+    [myTasks]
+  );
+
+  const updateTask = useCallback(
+    async (taskId: number, accessToken: string, userId: string) => {
+      const response = await api.patch(
+        `/tasks/${taskId}`,
+        { completed: true, userId: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+    },
+    []
+  );
 
   return (
     <TarefasContext.Provider
-      value={{ handleTasks, myTasks, getTasks, deleteTasks }}
+      value={{ createTasks, myTasks, getTasks, deleteTasks, updateTask }}
     >
       {children}
     </TarefasContext.Provider>
