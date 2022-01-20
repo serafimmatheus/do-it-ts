@@ -1,19 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Heading,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Grid, Heading, Text, VStack } from "@chakra-ui/react";
 import { Input } from "../../Components/Form/Input";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { useForm } from "react-hook-form";
@@ -22,8 +7,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useLogin } from "../../Hooks/LoginHooks";
 import { useHistory } from "react-router-dom";
-import { ModalLoginSuccess } from "../../Components/ModalLogin/ModalLoginSuccess";
-import { ModalLoginError } from "../../Components/ModalLogin/ModalLoginError";
 
 interface SignInData {
   email: string;

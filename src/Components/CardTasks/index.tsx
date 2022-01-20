@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Grid,
   Heading,
   Text,
   VStack,
@@ -19,16 +18,12 @@ interface CardProps {
   completed: boolean;
 }
 
-interface HandleDeleteProps {
-  id: number;
-}
-
 export const CardTasks = ({ title, description, id, completed }: CardProps) => {
   const toast = useToast();
 
   const { data } = useLogin();
 
-  const { deleteTasks, myTasks, updateTask, getTasks } = useTarefas();
+  const { deleteTasks, updateTask, getTasks } = useTarefas();
 
   const handleDelete = (id: any) => {
     deleteTasks(id)
@@ -59,12 +54,15 @@ export const CardTasks = ({ title, description, id, completed }: CardProps) => {
   return (
     <Flex
       flexDirection="column"
-      w={["320px", "384px"]}
+      w={["320px", "384px", "auto"]}
       h="auto"
       bg="gray.100"
       padding="20px"
       margin={["10px 0px", "10px 0px", "10px"]}
       justifyContent="center"
+      boxShadow="2xl"
+      cursor="pointer"
+      _hover={{ transform: "translateY(-10px)", transition: "0.5s" }}
     >
       <Flex alignItems="center" justifyContent="space-between" mb="3">
         <Heading size="md">{title}</Heading>

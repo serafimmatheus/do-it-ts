@@ -1,12 +1,9 @@
 import {
   Box,
-  Button,
-  Center,
   Flex,
   Grid,
   Heading,
   Image,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { FaTh } from "react-icons/fa";

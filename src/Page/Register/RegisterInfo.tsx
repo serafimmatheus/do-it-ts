@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Heading, Image, Text, theme } from "@chakra-ui/react";
+import { Flex, Grid, Heading, Image, Text } from "@chakra-ui/react";
 import secondary from "../../Assets/logo-secondary.svg";
 import vector from "../../Assets/Vector.svg";
 import { FaLayerGroup } from "react-icons/fa";

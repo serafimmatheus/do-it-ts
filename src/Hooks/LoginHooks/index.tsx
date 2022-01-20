@@ -7,7 +7,6 @@ import {
 } from "react";
 import { LoginData } from "../../Types.ts/Login";
 import { api } from "../../Services/api";
-import { useHistory } from "react-router-dom";
 
 interface LoginProviderProps {
   handleLogin: (data: LoginData) => Promise<void>;

@@ -4,7 +4,6 @@ import {
   useCallback,
   ReactNode,
   useState,
-  useEffect,
 } from "react";
 import { api } from "../../Services/api";
 

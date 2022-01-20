@@ -3,7 +3,12 @@ import { FaSistrix } from "react-icons/fa";
 import { Box, Button, Flex, Grid, useDisclosure } from "@chakra-ui/react";
 import { ModalTasks } from "../ModalTasks";
 
-export const Search = () => {
+interface Searchprops {
+  setIsSearch: any;
+  isSearch: boolean;
+}
+
+export const Search = ({ setIsSearch, isSearch }: Searchprops) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -32,6 +37,7 @@ export const Search = () => {
             _hover={{
               background: "purple.700",
             }}
+            onClick={() => setIsSearch(!isSearch)}
           >
             <FaSistrix color="white" fontSize="30px" />
           </Button>
