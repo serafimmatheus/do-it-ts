@@ -57,5 +57,8 @@
   "devDependencies": {
     "i": "^0.3.7",
     "mini-css-extract-plugin": "2.4.5"
+  },
+  "resolutions": {
+    "mini-css-extract-plugin": "2.4.5"
   }
 }
