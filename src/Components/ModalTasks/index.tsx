@@ -44,10 +44,7 @@ export const ModalTasks = ({ isOpen, onClose }: ModalTasksProps) => {
       .string()
       .required("Título obrigatório")
       .max(20, "Máximo 20 caracteres"),
-    description: yup
-      .string()
-      .required("Título obrigatório")
-      .max(100, "Máximo 100 caracteres"),
+    description: yup.string().required("Título obrigatório"),
   });
 
   const {

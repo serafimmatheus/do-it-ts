@@ -21,6 +21,7 @@ interface MycardsProps {
 
 interface TarefasProvidersData {
   myTasks: any;
+  getTask: any;
   getTasks: (userId: string, accessToken: string) => Promise<void>;
   deleteTasks: (id: any) => Promise<void>;
   updateTask: (
@@ -29,6 +30,7 @@ interface TarefasProvidersData {
     userId: string
   ) => Promise<void>;
   createTasks: (data: any, accessToken: string) => Promise<void>;
+  searchTask: (title: string, accessToken: string) => Promise<void>;
 }
 
 const TarefasContext = createContext<TarefasProvidersData>(
@@ -49,6 +51,8 @@ export const TarefasProviders = ({ children }: ChildrenProps) => {
   const [token] = useState(localStorage.getItem("@token-doit") || "");
 
   const [myTasks, setMyTasks] = useState<any[]>([]);
+
+  const [getTask, setGetTask] = useState<any>([]);
 
   const getTasks = useCallback(async (userId: string, accessToken: string) => {
     // const { data } = response;
@@ -103,9 +107,28 @@ export const TarefasProviders = ({ children }: ChildrenProps) => {
     []
   );
 
+  const searchTask = useCallback(async (title: any, accessToken: string) => {
+    console.log(title);
+    const response = await api.get(`/tasks?title_like=${title}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    setGetTask(response.data);
+  }, []);
+
   return (
     <TarefasContext.Provider
-      value={{ createTasks, myTasks, getTasks, deleteTasks, updateTask }}
+      value={{
+        createTasks,
+        myTasks,
+        getTasks,
+        deleteTasks,
+        updateTask,
+        searchTask,
+        getTask,
+      }}
     >
       {children}
     </TarefasContext.Provider>

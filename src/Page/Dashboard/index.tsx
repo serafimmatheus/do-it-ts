@@ -17,7 +17,7 @@ interface CardProps {
 export const Dashboard = () => {
   const [isSearch, setIsSearch] = useState(false);
 
-  const { myTasks, getTasks } = useTarefas();
+  const { myTasks, getTasks, getTask } = useTarefas();
 
   const { data } = useLogin();
 
@@ -42,7 +42,16 @@ export const Dashboard = () => {
             paddingX="8"
           >
             {isSearch
-              ? "ola"
+              ? getTask.length > 0 &&
+                getTask.map((elem: CardProps) => (
+                  <CardTasks
+                    key={elem.id}
+                    id={elem.id}
+                    title={elem.title}
+                    description={elem.description}
+                    completed={elem.completed}
+                  />
+                ))
               : myTasks.map((elem: CardProps) => (
                   <CardTasks
                     key={elem.id}

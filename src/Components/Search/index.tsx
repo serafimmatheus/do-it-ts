@@ -2,6 +2,10 @@ import { Input } from "../Form/Input";
 import { FaSistrix } from "react-icons/fa";
 import { Box, Button, Flex, Grid, useDisclosure } from "@chakra-ui/react";
 import { ModalTasks } from "../ModalTasks";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useTarefas } from "../../Hooks/TarefasHooks";
+import { useLogin } from "../../Hooks/LoginHooks";
 
 interface Searchprops {
   setIsSearch: any;
@@ -10,6 +14,17 @@ interface Searchprops {
 
 export const Search = ({ setIsSearch, isSearch }: Searchprops) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { register, handleSubmit } = useForm();
+
+  const { searchTask } = useTarefas();
+
+  const { data } = useLogin();
+
+  const handleSearchTasks = (search: any) => {
+    searchTask(search.title, data.accessToken);
+  };
+
   return (
     <>
       <ModalTasks isOpen={isOpen} onClose={onClose} />
@@ -23,11 +38,13 @@ export const Search = ({ setIsSearch, isSearch }: Searchprops) => {
         borderColor="gray.100"
       >
         <Flex
+          as="form"
+          onSubmit={handleSubmit(handleSearchTasks)}
           w={["100%", "100%", "100%", "50%"]}
           padding={["0 20px", "0 20px", "0 0 0 20px", "0 0 0 40px"]}
         >
           <Box w="100%">
-            <Input name="teste" placeholder="Pesquise por tarefa" />
+            <Input {...register("title")} placeholder="Pesquise por tarefa" />
           </Box>
           <Button
             bg="purple.600"
@@ -37,7 +54,8 @@ export const Search = ({ setIsSearch, isSearch }: Searchprops) => {
             _hover={{
               background: "purple.700",
             }}
-            onClick={() => setIsSearch(!isSearch)}
+            type="submit"
+            onClick={() => setIsSearch(true)}
           >
             <FaSistrix color="white" fontSize="30px" />
           </Button>
