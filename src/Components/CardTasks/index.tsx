@@ -13,7 +13,7 @@ import { FaTrash, FaCheck } from "react-icons/fa";
 import { useLogin } from "../../Hooks/LoginHooks";
 import { useTarefas } from "../../Hooks/TarefasHooks";
 import { ModalDescription } from "../ModalDescription";
-import { format, compareAsc } from "date-fns";
+import { format } from "date-fns";
 
 interface CardProps {
   id: number;
