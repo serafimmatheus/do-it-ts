@@ -31,6 +31,8 @@ interface TarefasProvidersData {
   ) => Promise<void>;
   createTasks: (data: any, accessToken: string) => Promise<void>;
   searchTask: (title: string, accessToken: string) => Promise<void>;
+  notFound: boolean;
+  notFoundTask: string;
 }
 
 const TarefasContext = createContext<TarefasProvidersData>(
@@ -53,6 +55,10 @@ export const TarefasProviders = ({ children }: ChildrenProps) => {
   const [myTasks, setMyTasks] = useState<any[]>([]);
 
   const [getTask, setGetTask] = useState<any>([]);
+
+  const [notFound, setNotFound] = useState(false);
+
+  const [notFoundTask, setNotFoundTask] = useState("");
 
   const getTasks = useCallback(async (userId: string, accessToken: string) => {
     // const { data } = response;
@@ -108,12 +114,18 @@ export const TarefasProviders = ({ children }: ChildrenProps) => {
   );
 
   const searchTask = useCallback(async (title: any, accessToken: string) => {
-    console.log(title);
     const response = await api.get(`/tasks?title_like=${title}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
+    if (!response.data.length) {
+      setNotFoundTask(title);
+      return setNotFound(true);
+    }
+
+    setNotFound(false);
 
     setGetTask(response.data);
   }, []);
@@ -128,6 +140,8 @@ export const TarefasProviders = ({ children }: ChildrenProps) => {
         updateTask,
         searchTask,
         getTask,
+        notFound,
+        notFoundTask,
       }}
     >
       {children}

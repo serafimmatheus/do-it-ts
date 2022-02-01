@@ -13,6 +13,7 @@ import { FaTrash, FaCheck } from "react-icons/fa";
 import { useLogin } from "../../Hooks/LoginHooks";
 import { useTarefas } from "../../Hooks/TarefasHooks";
 import { ModalDescription } from "../ModalDescription";
+import { format, compareAsc } from "date-fns";
 
 interface CardProps {
   id: number;
@@ -87,6 +88,7 @@ export const CardTasks = ({ title, description, id, completed }: CardProps) => {
         boxShadow="2xl"
         cursor="pointer"
         _hover={{ transform: "translateY(-10px)", transition: "0.5s" }}
+        transition={"0.5s"}
       >
         <Flex alignItems="center" justifyContent="space-between" mb="3">
           <Heading size="md">{title}</Heading>
@@ -139,7 +141,7 @@ export const CardTasks = ({ title, description, id, completed }: CardProps) => {
           />
         </VStack>
 
-        <Text mt="5">07 March 2021</Text>
+        <Text mt="5">{format(new Date(), "dd/MM/yyyy")}</Text>
       </Flex>
     </>
   );
